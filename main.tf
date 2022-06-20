@@ -1,4 +1,4 @@
-# vpc: splunk-vpc
+#1 vpc: [splunk-vpc]
 module "network" {
   source = "github.com/terraform-google-modules/terraform-google-network"
   project_id  = var.project_id
@@ -21,20 +21,29 @@ module "network" {
     }
 }
 
-# pub/sub: splunk-dataflow-sink
+#2 pub/sub: [splunk-dataflow-sink]
 module "splunk-dataflow-sink" {
   source  = "terraform-google-modules/log-export/google//modules/pubsub"
-#   version = "3.2.0"
+#3 version = "3.2.0"
   project_id = var.project_id
   topic_name      = "splunk-dataflow-sink"
   log_sink_writer_identity = module.splunk-dataflow-export.writer_identity
 }
 
-# log router sink: splunk-dataflow-export
+#4 log router sink: [splunk-dataflow-export]
 module "splunk-dataflow-export" {
   source  = "terraform-google-modules/log-export/google"
   parent_resource_id = var.project_id
   log_sink_name = "splunk-dataflow-export"
   destination_uri = module.splunk-dataflow-sink.destination_uri
   filter = "resource.type!=\"dataflow_step\""
+}
+
+#5 add role [roles/dataflow.admin] to [compute@developer.gserviceaccount.com]
+resource "google_project_iam_binding" "dataflow_admin_to_svc_compute" {
+  project = var.project_id
+  role    = "roles/dataflow.admin"
+  members = [
+    "serviceAccount:${var.project_number}-compute@developer.gserviceaccount.com",
+  ]
 }

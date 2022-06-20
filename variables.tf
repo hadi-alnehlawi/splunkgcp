@@ -1,4 +1,5 @@
 variable project_id {}
+variable "project_number" {}
 variable region {}
 variable network_name {}
 variable subnets {type=list}
