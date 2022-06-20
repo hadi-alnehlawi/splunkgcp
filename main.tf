@@ -47,3 +47,13 @@ resource "google_project_iam_binding" "dataflow_admin_to_svc_compute" {
     "serviceAccount:${var.project_number}-compute@developer.gserviceaccount.com",
   ]
 }
+
+#6 gcs: [<project-id>-dataflow] is a dead letter queue 
+module "dead-letter-queue-gcs" {
+  source  = "terraform-google-modules/cloud-storage/google"
+  version = "3.2.0"
+  project_id = var.project_id
+  names = ["dataflow"]
+  prefix = var.project_id
+  location = var.region
+}
