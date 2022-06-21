@@ -21,14 +21,27 @@ module "network" {
     }
 }
 
-#2 pub/sub: [splunk-dataflow-sink]
+#2 pub/sub: topic [splunk-dataflow-sink]
 module "splunk-dataflow-sink" {
   source  = "terraform-google-modules/log-export/google//modules/pubsub"
-#3 version = "3.2.0"
   project_id = var.project_id
-  topic_name      = "splunk-dataflow-sink"
+  topic_name = "splunk-dataflow-sink"
   log_sink_writer_identity = module.splunk-dataflow-export.writer_identity
 }
+
+
+#3 pub/sub: subscriber [dataflow]
+resource "google_pubsub_subscription" "dataflow" {
+  depends_on = [
+    module.splunk-dataflow-sink
+  ]
+  name = "dataflow"
+  project = var.project_id
+  topic = module.splunk-dataflow-sink.resource_name
+}
+
+
+
 
 #4 log router sink: [splunk-dataflow-export]
 module "splunk-dataflow-export" {
@@ -57,3 +70,17 @@ module "dead-letter-queue-gcs" {
   prefix = var.project_id
   location = var.region
 }
+
+#7 pub/sub: [splunk-dataflow-deadletter]
+module "splunk-dataflow-deadletter" {
+  source  = "terraform-google-modules/pubsub/google"
+  version = "3.2.0"
+  project_id = var.project_id
+  topic = "splunk-dataflow-deadletter"
+  pull_subscriptions = [
+    {
+      name = "deadletter"
+    }
+  ]
+}
+
