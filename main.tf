@@ -84,3 +84,20 @@ module "splunk-dataflow-deadletter" {
   ]
 }
 
+#8 dataflow job: [splunk-dataflow]
+module "splunk-dataflow]" {
+  source  = "terraform-google-modules/dataflow/google"
+  version = "0.1.0"
+
+  project_id  = var.project_id
+  name = "splunk-dataflow"
+  on_delete = "cancel"
+  zone = var.region
+  max_workers = 1
+  template_gcs_path =  "gs://dataflow-templates-us-central1/latest/Cloud_PubSub_to_Splunk"
+  temp_gcs_location = "gs:/${var.project_id}-dataflow/tmp"
+  parameters = {
+        bar = "example string"
+        foo = 123
+  }
+}
