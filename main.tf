@@ -1,3 +1,9 @@
+#0 create [security logs] folder
+resource "google_folder" "secuirty-logs" {
+  display_name = var.folder_name
+  parent       = var.org_name # not each org has: display_name & name (which is like id)
+}
+
 #1 vpc: [splunk-vpc]
 module "network" {
   source = "github.com/terraform-google-modules/terraform-google-network"

@@ -1,3 +1,5 @@
+variable org_name {}
+variable folder_name {}
 variable project_id {}
 variable project_number {}
 variable region {}
