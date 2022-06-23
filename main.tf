@@ -1,3 +1,16 @@
+resource "google_logging_organization_sink" "my-sink" {
+  name   = "my-sink"
+  description = "some explanation on what this is"
+  org_id = "123456789"
+
+  # Can export to pubsub, cloud storage, or bigquery
+  destination = "storage.googleapis.com/${google_storage_bucket.log-bucket.name}"
+
+  # Log all WARN or higher severity messages relating to instances
+  filter = "resource.type = gce_instance AND severity >= WARNING"
+}
+
+
 #0 create [security logs] folder
 resource "google_folder" "secuirty-logs" {
   display_name = var.folder_name

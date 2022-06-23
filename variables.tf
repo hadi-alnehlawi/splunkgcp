@@ -1,4 +1,4 @@
-variable org_name {}
+variable org_id {}
 variable folder_name {}
 variable project_id {}
 variable project_number {}
