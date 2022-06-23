@@ -12,6 +12,7 @@ resource "google_logging_organization_sink" "org-sink" {
 #b pub/sub: [org-sink]
 resource "google_pubsub_topic" "org-sink-pubsub" {
   name = "org-sink-pubsub"
+  project = var.project_id
   labels = {
     system = "demo"
   }
