@@ -1,20 +1,30 @@
-# create org sink
-resource "google_logging_organization_sink" "org-sink" {
-  name   = "org-sink"
-  description = "demo sink on org level"
-  org_id = var.org_id
-  destination = "pubsub.googleapis.com/${google_pubsub_topic.org-sink-pubsub.id}"
-  # Log all WARN or higher severity messages relating to instances
-  filter = "resource.type = gce_instance AND severity >= WARNING"
-}
+# # create org sink
+# resource "google_logging_organization_sink" "org-sink" {
+#   name   = "org-sink"
+#   description = "demo sink on org level"
+#   org_id = var.org_id
+#   destination = "pubsub.googleapis.com/${google_pubsub_topic.org-sink-pubsub.id}"
+#   # Log all WARN or higher severity messages relating to instances
+#   filter = "resource.type = gce_instance AND severity >= WARNING"
+# }
 
-# create pub/sub for [org-sink]
-resource "google_pubsub_topic" "org-sink-pubsub" {
-  name = "org-sink-pubsub"
-  project = var.project_id
-  labels = {
-    system = "demo"
-  }
+# # create pub/sub for [org-sink]
+# resource "google_pubsub_topic" "org-sink-pubsub" {
+#   name = "org-sink-pubsub"
+#   project = var.project_id
+#   labels = {
+#     system = "demo"
+#   }
+# }
+
+
+resource "google_logging_organization_sink" "org_default_sink" {
+  name   = "_Default"
+  description = "some explanation on what this is"
+  org_id = var.org_id
+  # Can export to pubsub, cloud storage, or bigquery
+  destination = "storage.googleapis.com/organizations"
+  disabled = true
 }
 
 # #0 create [security logs] folder
