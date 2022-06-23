@@ -8,7 +8,7 @@ resource "google_logging_organization_sink" "org-sink" {
   filter = "resource.type = gce_instance AND severity >= WARNING"
 }
 
-#b pub/sub: [org-sink]
+# create pub/sub for [org-sink]
 resource "google_pubsub_topic" "org-sink-pubsub" {
   name = "org-sink-pubsub"
   project = var.project_id
