@@ -3,8 +3,7 @@ resource "google_logging_organization_sink" "org-sink" {
   name   = "org-sink"
   description = "demo sink on org level"
   org_id = var.org_id
-  # destination = "pubsub.googleapis.com/projects/${var.project_id}/topics/${google_pubsub_topic.org-sink-pubsub.topic_id}"
-  destination = google_pubsub_topic.org-sink-pubsub.id
+  destination = "pubsub.googleapis.com/${google_pubsub_topic.org-sink-pubsub.id}"
   # Log all WARN or higher severity messages relating to instances
   filter = "resource.type = gce_instance AND severity >= WARNING"
 }
