@@ -1,4 +1,4 @@
-#a org sink
+# create org sink
 resource "google_logging_organization_sink" "org-sink" {
   name   = "org-sink"
   description = "demo sink on org level"
